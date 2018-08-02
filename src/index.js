@@ -6,8 +6,23 @@ import SearchBar from './components/search_bar';
 import YTSearch from 'youtube-api-search';
 import VideoList from './components/video_list';
 import VideoDetails from './components/video_details';
+import DemoForm from './components/demoForm';
+import { createStore, combineReducers } from 'redux'
+import {reducer as formReducer } from 'redux-form';
+import { Provider } from 'react-redux';
 
 const YOUTUE_API_KEY = 'AIzaSyB1Z0gBfVBAvsYjuZhARm8WC9kgsalASXI';
+
+const rootReducer = combineReducers({
+    // ...your other reducers here
+    // you have to pass formReducer under 'form' key,
+    // for custom keys look up the docs for 'getFormState'
+    form: formReducer
+  })
+
+const store = createStore(rootReducer, 
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+)
 
 class App extends Component {
     constructor(props) {
@@ -31,6 +46,7 @@ class App extends Component {
     render() {
         return (
             <div>
+                <DemoForm />
                 <SearchBar fireEventToYoutube={(event) => {this.callToYoutubeApi(event.target.value)}}/>
                 <VideoDetails video={this.state.video} />
                 <VideoList videos={this.state.videos} setVideo={(video) => {this.setState({video})}}/>
@@ -39,5 +55,5 @@ class App extends Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
 registerServiceWorker();
