@@ -5,8 +5,8 @@ let DemoForm = props => {
     return (
         <form>
             <div>
-                <label> FirstName</label>
-                <Field name="firstName" component="input"/>
+               
+               
             </div>
         </form>
     );

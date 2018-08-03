@@ -5,7 +5,10 @@ class search_bar extends Component {
     
     render() {
         return (
-            <input type="text" className="form-control" onChange={this.props.fireEventToYoutube}/>
+           <div style={{maxWith: '200px', margin:'0px 40% 42px 40%'}}>
+                <label><h3>Search:</h3></label> <input type="text" className="form-control" onChange={this.props.fireEventToYoutube}/>
+           </div>
+           
         );
     }
 }

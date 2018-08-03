@@ -1,59 +1,37 @@
-import React, {Component} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-import SearchBar from './components/search_bar';
-import YTSearch from 'youtube-api-search';
-import VideoList from './components/video_list';
-import VideoDetails from './components/video_details';
-import DemoForm from './components/demoForm';
 import { createStore, combineReducers } from 'redux'
 import {reducer as formReducer } from 'redux-form';
 import { Provider } from 'react-redux';
-
-const YOUTUE_API_KEY = 'AIzaSyB1Z0gBfVBAvsYjuZhARm8WC9kgsalASXI';
+import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import Youtube from './youtube';
+import FileAClaim from './fileaclaim/fileaclaim';
+import Navigation from './navigation';
+import Home from './home';
 
 const rootReducer = combineReducers({
-    // ...your other reducers here
-    // you have to pass formReducer under 'form' key,
-    // for custom keys look up the docs for 'getFormState'
     form: formReducer
-  })
+})
 
 const store = createStore(rootReducer, 
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 
-class App extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            videos: [],
-            video:null
-        }
-        YTSearch({key: YOUTUE_API_KEY, term: 'You are my love'}, (videos)=> {
-            this.setState({videos:videos,video:videos[0]});
-        })
-    }
-    callToYoutubeApi = (inputValue) => {
-        console.log(inputValue);
-        YTSearch({key: YOUTUE_API_KEY, term: inputValue}, (videos)=> {
-            this.setState({videos:videos,video:videos[0]});
-        })
-        //console.log(this.state.videos);
-    }
-    render() {
+const App = () => {
         return (
             <div>
-                <DemoForm />
-                <SearchBar fireEventToYoutube={(event) => {this.callToYoutubeApi(event.target.value)}}/>
-                <VideoDetails video={this.state.video} />
-                <VideoList videos={this.state.videos} setVideo={(video) => {this.setState({video})}}/>
+                <Navigation />
+                <Provider store={store}>
+                    <Switch>
+                        <Route exact path="/" component={Home}/>
+                        <Route path="/youtube" component={Youtube}/>
+                        <Route path="/fileaclaim" component={FileAClaim}/>
+                    </Switch>
+                </Provider>    
             </div>
         )
-    }
 }
 
-ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
+ReactDOM.render( <BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));
 registerServiceWorker();
