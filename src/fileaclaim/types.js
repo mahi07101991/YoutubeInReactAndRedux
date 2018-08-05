@@ -1,1 +1,1 @@
-const FILE_A_CLAIM = 'FILE_A_CLAIM';
+export const pageState = 'pageState';
